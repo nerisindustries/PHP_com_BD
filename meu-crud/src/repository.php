@@ -18,14 +18,22 @@ $stmt->execute([$id]);
 $row = $stmt -> fetch();
 return $row ?:  null;
 }
+function atualizar_tarefa(int $id, string $titulo, ?string $descricao,$descricao, string
+$status): bool
+{
+$sql ="update tarefas set titulo =?, descricao =?, status=? where id=?";
 
 
 
-
-
-
-
-
-
+$sql = "UPDATE tarefas SET titulo = ?, descricao = ?, status = ? WHERE id =?";
+$stmt = db ()-> prepare($sql);
+return $stmt->execute ([$titulo, $descricao, $status, $id]);
+}
+function excluir_tarefa(int $id):
+{
+    $sql = "DELETE FROM tarefas WHERE id =?";
+    $stmt = db()->prepare($sql);
+    return $stmt->execute([$id]);
+}
 
 ?>
