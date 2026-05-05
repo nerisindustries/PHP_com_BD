@@ -11,5 +11,55 @@ se houve um erro.
 
 )
 
+5.2 Exercícios de fixação (PDO)
+• Identificar quais funções usam query() e quais usam prepare().
+• Explicar por que prepare() é obrigatório quando há entrada do usuário.
+1-
+
+query:
+_function listar_tarefas(): array_
+{
+$sql = "SELECT * FROM tarefas ORDER BY id DESC";
+return db()->query($sql)->fetchAll();
+}
 
 
+
+
+prepare:
+_function criar_tarefa(string $titulo, ?string $descricao, string $status): int_
+{
+$sql = "INSERT INTO tarefas (titulo, descricao, status) VALUES (?, ?, ?)";
+$stmt = db()->prepare($sql);
+$stmt->execute([$titulo, $descricao, $status]);
+return (int) db()->lastInsertId();
+}
+
+_function buscar_tarefa(int $id): ?array_
+{
+$sql = "SELECT * FROM tarefas WHERE id = ?";
+$stmt = db()->prepare($sql);
+$stmt->execute([$id]);
+$row = $stmt->fetch();
+return $row ?: null;
+}
+
+_function atualizar_tarefa(int $id, string $titulo, ?string $descricao, string_
+$status): bool
+{
+$sql = "UPDATE tarefas SET titulo = ?, descricao = ?, status = ? WHERE id
+= ?";
+$stmt = db()->prepare($sql);
+return $stmt->execute([$titulo, $descricao, $status, $id]);
+}
+
+_function excluir_tarefa(int $id)_
+{
+$sql = "DELETE FROM tarefas WHERE id = ?";
+$stmt = db()->prepare($sql);
+return $stmt->execute([$id]);
+}
+
+
+2-O 'prepare' é obrigatório para evitar sql injection, pois, ele separa o código sql das informações
+providas do usuário assim evitando a injeção de dados maliciosos
