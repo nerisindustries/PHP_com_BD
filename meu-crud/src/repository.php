@@ -1,39 +1,51 @@
 <?php
-
 // src/repository.php
-require_once_DIR_.'/../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
-function listar_tarefas(): array
+// Atualizado para aceitar o filtro de status opcional
+function listar_tarefas(?string $status = null): array
 {
-    $aql ="SELECT * FROM tarefas ORDER BY id DESC";
+    // Se o status for válido, usamos o prepare para filtrar com segurança
+    if ($status === 'pendente' || $status === 'feito') {
+        $sql = "SELECT * FROM tarefas WHERE status = ? ORDER BY id DESC";
+        $stmt = db()->prepare($sql);
+        $stmt->execute([$status]);
+        return $stmt->fetchAll();
+    }
+
+    // Se não houver filtro, busca todas as tarefas
+    $sql = "SELECT * FROM tarefas ORDER BY id DESC";
     return db()->query($sql)->fetchAll();
-
 }
 
-function criar_tarefas(string $titulo, ?string $descricao,string $status): int
+function criar_tarefa(string $titulo, ?string $descricao, string $status): int
 {
-    $sql = "INSERT INTO tarfas (título, descricao, status) VALUES(?,?,?)";
-$stmt = db ()-> prepare($sql);
-$stmt->execute([$id]);
-$row = $stmt -> fetch();
-return $row ?:  null;
+    $sql = "INSERT INTO tarefas (titulo, descricao, status) VALUES (?, ?, ?)";
+    $stmt = db()->prepare($sql);
+    $stmt->execute([$titulo, $descricao, $status]);
+    return (int) db()->lastInsertId();
 }
-function atualizar_tarefa(int $id, string $titulo, ?string $descricao,$descricao, string
-$status): bool
+
+function buscar_tarefa(int $id): ?array
 {
-$sql ="update tarefas set titulo =?, descricao =?, status=? where id=?";
-
-
-
-$sql = "UPDATE tarefas SET titulo = ?, descricao = ?, status = ? WHERE id =?";
-$stmt = db ()-> prepare($sql);
-return $stmt->execute ([$titulo, $descricao, $status, $id]);
+    $sql = "SELECT * FROM tarefas WHERE id = ?";
+    $stmt = db()->prepare($sql);
+    $stmt->execute([$id]);
+    $row = $stmt->fetch();
+    return $row ?: null;
 }
-function excluir_tarefa(int $id):
+
+function atualizar_tarefa(int $id, string $titulo, ?string $descricao, string $status): bool
 {
-    $sql = "DELETE FROM tarefas WHERE id =?";
+    $sql = "UPDATE tarefas SET titulo = ?, descricao = ?, status = ? WHERE id = ?";
+    $stmt = db()->prepare($sql);
+    return $stmt->execute([$titulo, $descricao, $status, $id]);
+}
+
+function excluir_tarefa(int $id): bool
+{
+    $sql = "DELETE FROM tarefas WHERE id = ?";
     $stmt = db()->prepare($sql);
     return $stmt->execute([$id]);
 }
-
 ?>
