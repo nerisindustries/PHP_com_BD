@@ -74,3 +74,9 @@ b-Para que cliques indesejados  no botão, possam ocasionar a exclusão do banco
 
 8.2
 A-Basicamente um null é algo que nem se quer foi criado ou um formulario onde o usuário não preencheu um campo e o sistema não sabe ao certo se ele existe ou não, já a string é aapenas uma "pasta existente, porém sem arquivos",ou seja o usuário interagiu com o campo, mas não digitou nada ou apagou!
+
+Explicações SQL
+
+1-A primary key é uma chave primária responsáve por ser identidade unica de cada registro na tabela.
+2-Auto_Incrment é basicamente um automatizador de contagem, basicamente ele sozinho numera um id sempre que uma tarefa é criada.
+3-Enum é uma lista fecha de oções, então ela não permite qualquer texto,mas só as opções que ela determinou.
