@@ -63,3 +63,14 @@ return $stmt->execute([$id]);
 
 2-O 'prepare' é obrigatório para evitar sql injection, pois, ele separa o código sql das informações
 providas do usuário assim evitando a injeção de dados maliciosos
+
+
+7.2-
+
+a-Devemos usálo em variaveis vindo do banco de dads, pois ele funciona da seguinte forma, após receber os dados vindo dos bancos ,ele "cifra" os dados vindos do bancos, assim se um usário com más intenções digitando por exemplo um comando que eu pesquisei pra entender,<script>alert('hackeado')</script>, este comando faz com que quando um usuário comum abra a página um pop-up com uma mensagem "hackeado" , ele cifra isso e impede que o sistema reconheça isso como comando e o execute.
+
+
+b-Para que cliques indesejados  no botão, possam ocasionar a exclusão do banco todo sem querer,que alterções no servidor por exemplo devm ser post segundo a semantica do HTTP e é mais seguro, contra por exemplo:proteção contra CSRF que de forma resumida é um meio de um hacker enviar um botão de exclusão para os usuários.
+
+8.2
+A-Basicamente um null é algo que nem se quer foi criado ou um formulario onde o usuário não preencheu um campo e o sistema não sabe ao certo se ele existe ou não, já a string é aapenas uma "pasta existente, porém sem arquivos",ou seja o usuário interagiu com o campo, mas não digitou nada ou apagou!
